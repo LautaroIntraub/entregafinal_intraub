@@ -1,0 +1,1554 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículos | Panel de Gestión</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #0b1120;
+            --sidebar: #101827;
+            --surface: #151f30;
+            --surface-hover: #1c2a3e;
+            --border: #253247;
+            --text: #f1f5f9;
+            --muted: #8795aa;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --green: #22c55e;
+            --red: #ef4444;
+            --blue: #38bdf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button, input {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px;
+            margin-bottom: 48px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 800;
+            box-shadow: 0 5px 20px #6366f133;
+        }
+
+        .brand h2 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .brand span {
+            color: var(--muted);
+            font-size: 11px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .menu-label {
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 0 12px;
+            margin-bottom: 14px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            border-radius: 9px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .menu-item.active {
+            background: #6366f11a;
+            color: #a5b4fc;
+            border: 1px solid #6366f133;
+        }
+
+        .menu-item:hover {
+            background: var(--surface-hover);
+            color: white;
+        }
+
+        .menu-icon {
+            font-size: 17px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 15px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .sidebar-bottom p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .sidebar-bottom strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px 42px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 38px;
+            gap: 15px;
+        }
+
+        .breadcrumb {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .breadcrumb span {
+            color: #a5b4fc;
+        }
+
+        .page-title {
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: -0.7px;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* WELCOME */
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 19px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 23px;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .icon-purple {
+            background: #6366f120;
+            color: #a5b4fc;
+        }
+
+        .icon-green {
+            background: #22c55e20;
+            color: #4ade80;
+        }
+
+        .icon-blue {
+            background: #38bdf820;
+            color: #38bdf8;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            overflow-wrap: anywhere;
+        }
+
+        .stat-description {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 7px;
+        }
+
+        /* CONTENT PANEL */
+
+        .content-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 23px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-hover);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: #29384d;
+        }
+
+        /* SEARCH */
+
+        .search-area {
+            padding: 19px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 11px 14px 11px 38px;
+            color: white;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+
+        .search-symbol {
+            position: absolute;
+            left: 13px;
+            top: 10px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .results-count {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* TABLE */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 550px;
+        }
+
+        thead {
+            background: #111a29;
+        }
+
+        th {
+            padding: 14px 25px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #718096;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 17px 25px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        tbody tr {
+            transition: 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #ffffff05;
+        }
+
+        .id-badge {
+            background: #6366f11a;
+            color: #a5b4fc;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .article-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .price {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 31px;
+            height: 31px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--muted);
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .edit-btn:hover {
+            color: #a5b4fc;
+            border-color: var(--primary);
+        }
+
+        .delete-btn:hover {
+            color: #f87171;
+            border-color: var(--red);
+        }
+
+        /* EMPTY / LOADING */
+
+        .empty-state {
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* MODAL */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000000b8;
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 440px;
+            background: #151f30;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 27px;
+            box-shadow: 0 20px 70px #00000070;
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+        }
+
+        .close-modal {
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-size: 23px;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #cbd5e1;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .form-group input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 13px;
+            color: white;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .form-group input::placeholder {
+            color: #64748b;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        /* TOAST */
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #192638;
+            border: 1px solid var(--border);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: white;
+            box-shadow: 0 10px 35px #00000055;
+            display: none;
+            z-index: 200;
+            max-width: calc(100% - 40px);
+        }
+
+        .toast.show {
+            display: block;
+            animation: modalIn 0.2s ease;
+        }
+
+        .toast.success {
+            border-left: 3px solid var(--green);
+        }
+
+        .toast.error {
+            border-left: 3px solid var(--red);
+        }
+
+        /* FOOTER */
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #526176;
+            font-size: 10px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .main {
+                padding: 28px 22px;
+            }
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .stats-grid {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+
+            .stat-value {
+                font-size: 21px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 65px;
+                padding: 20px 9px;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .brand-text,
+            .menu-label,
+            .menu-item span:not(.menu-icon),
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .main {
+                padding: 22px 14px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 19px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .date-label {
+                display: none;
+            }
+
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .panel-actions {
+                width: 100%;
+            }
+
+            .panel-actions .btn {
+                flex: 1;
+            }
+
+            .search-area {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .page-title {
+                font-size: 20px;
+            }
+
+            .top-right {
+                gap: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">A</div>
+            <div class="brand-text">
+                <h2>Article<span>Management System</span></h2>
+            </div>
+        </div>
+
+        <div class="menu-label">MENÚ PRINCIPAL</div>
+
+        <button class="menu-item active" onclick="goToDashboard()">
+            <span class="menu-icon">▦</span>
+            <span>Dashboard</span>
+        </button>
+
+        <button class="menu-item" onclick="goToArticles()">
+            <span class="menu-icon">▤</span>
+            <span>Artículos</span>
+        </button>
+
+        <div class="sidebar-bottom">
+            <strong>Panel administrativo</strong>
+            <p>Gestión centralizada de artículos y precios.</p>
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <div class="breadcrumb">
+                    Inicio / <span>Dashboard</span>
+                </div>
+
+                <h1 class="page-title">Panel de gestión</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="date-label" id="currentDate"></span>
+                <div class="avatar">AD</div>
+            </div>
+
+        </header>
+
+        <section class="welcome">
+            <h2>¡Bienvenido al sistema! 👋</h2>
+            <p>Administrá tus artículos, consultá precios y mantené tu información actualizada.</p>
+        </section>
+
+        <!-- STATISTICS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-header">
+                    <span class="stat-label">Total de artículos</span>
+                    <div class="stat-icon icon-purple">▤</div>
+                </div>
+
+                <div class="stat-value" id="totalArticles">0</div>
+                <div class="stat-description">Registros almacenados en la base de datos</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-header">
+                    <span class="stat-label">Valor del inventario</span>
+                    <div class="stat-icon icon-green">$</div>
+                </div>
+
+                <div class="stat-value" id="totalValue">$ 0,00</div>
+                <div class="stat-description">Suma de los precios de todos los artículos</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-header">
+                    <span class="stat-label">Precio promedio</span>
+                    <div class="stat-icon icon-blue">↗</div>
+                </div>
+
+                <div class="stat-value" id="averagePrice">$ 0,00</div>
+                <div class="stat-description">Precio promedio por artículo registrado</div>
+
+            </div>
+
+        </section>
+
+        <!-- ARTICLES -->
+        <section class="content-panel" id="articlesSection">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>Listado de artículos</h2>
+                    <p>Administración de los registros de la base de datos</p>
+                </div>
+
+                <div class="panel-actions">
+                    <button class="btn btn-secondary" onclick="loadArticles()">
+                        ↻ Actualizar
+                    </button>
+
+                    <button class="btn btn-primary" onclick="openCreateModal()">
+                        + Nuevo artículo
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="search-area">
+
+                <div class="search-box">
+                    <span class="search-symbol">⌕</span>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Buscar artículo por nombre..."
+                        oninput="filterArticles()"
+                    >
+                </div>
+
+                <span class="results-count" id="resultsCount">
+                    0 artículos
+                </span>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre del artículo</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="articlesTable">
+                        <tr>
+                            <td colspan="4">
+                                <div class="loading">Cargando artículos...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            Article Management System · Java · Spring Boot · MySQL
+        </footer>
+
+    </main>
+
+</div>
+
+<!-- MODAL CREATE / EDIT -->
+<div class="modal-overlay" id="articleModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2 id="modalTitle">Nuevo artículo</h2>
+            <button class="close-modal" onclick="closeModal()">×</button>
+        </div>
+
+        <form id="articleForm">
+
+            <input type="hidden" id="articleId">
+
+            <div class="form-group">
+                <label for="articleName">Nombre del artículo</label>
+                <input
+                    type="text"
+                    id="articleName"
+                    placeholder="Ej: Teclado mecánico"
+                    maxlength="150"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="articlePrice">Precio</label>
+                <input
+                    type="number"
+                    id="articlePrice"
+                    placeholder="Ej: 25000.00"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="closeModal()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveButton"
+                >
+                    Guardar artículo
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+
+    // ==========================================
+    // CONFIGURACIÓN
+    // ==========================================
+
+    const API_URL = '/api/articulos';
+
+    let articles = [];
+    let editingId = null;
+
+    // Formato monetario argentino
+    const currencyFormatter = new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS',
+        minimumFractionDigits: 2
+    });
+
+    // ==========================================
+    // INICIALIZACIÓN
+    // ==========================================
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        document.getElementById('currentDate').textContent =
+            new Date().toLocaleDateString('es-AR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+        loadArticles();
+
+    });
+
+    // ==========================================
+    // COMUNICACIÓN CON API REST
+    // ==========================================
+
+    async function apiRequest(endpoint = '', options = {}) {
+
+        const response = await fetch(API_URL + endpoint, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+
+        if (!response.ok) {
+
+            let message = `Error HTTP ${response.status}`;
+
+            try {
+                const errorData = await response.json();
+                message = errorData.message || message;
+            } catch (_) {
+                // La respuesta puede no contener JSON.
+            }
+
+            throw new Error(message);
+        }
+
+        if (response.status === 204) {
+            return null;
+        }
+
+        const text = await response.text();
+
+        return text ? JSON.parse(text) : null;
+    }
+
+    // ==========================================
+    // LISTAR ARTÍCULOS
+    // ==========================================
+
+    async function loadArticles() {
+
+        const table = document.getElementById('articlesTable');
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    <div class="loading">Cargando artículos...</div>
+                </td>
+            </tr>
+        `;
+
+        try {
+
+            const data = await apiRequest();
+
+            if (!Array.isArray(data)) {
+                throw new Error('La API devolvió una respuesta inesperada.');
+            }
+
+            articles = data;
+
+            updateDashboard();
+            filterArticles();
+
+        } catch (error) {
+
+            console.error('Error al cargar artículos:', error);
+
+            articles = [];
+
+            updateDashboard();
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <div class="empty-icon">⚠️</div>
+                            <h3>No se pudieron cargar los artículos</h3>
+                            <p>${escapeHTML(error.message)}</p>
+                            <br>
+                            <button class="btn btn-secondary" onclick="loadArticles()">
+                                Reintentar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            document.getElementById('resultsCount').textContent =
+                'Error de conexión';
+
+            showToast('No se pudo conectar con el servidor.', 'error');
+        }
+    }
+
+    // ==========================================
+    // ACTUALIZAR ESTADÍSTICAS
+    // ==========================================
+
+    function updateDashboard() {
+
+        const total = articles.length;
+
+        const inventoryValue = articles.reduce(
+            (sum, article) => sum + Number(article.precio || 0),
+            0
+        );
+
+        const average = total > 0
+            ? inventoryValue / total
+            : 0;
+
+        document.getElementById('totalArticles').textContent = total;
+
+        document.getElementById('totalValue').textContent =
+            currencyFormatter.format(inventoryValue);
+
+        document.getElementById('averagePrice').textContent =
+            currencyFormatter.format(average);
+    }
+
+    // ==========================================
+    // BUSCADOR Y RENDERIZADO
+    // ==========================================
+
+    function filterArticles() {
+
+        const search = document
+            .getElementById('searchInput')
+            .value
+            .toLowerCase()
+            .trim();
+
+        const filtered = articles.filter(article =>
+            String(article.nombre || '')
+                .toLowerCase()
+                .includes(search)
+        );
+
+        renderArticles(filtered);
+    }
+
+    function renderArticles(data) {
+
+        const table = document.getElementById('articlesTable');
+
+        document.getElementById('resultsCount').textContent =
+            `${data.length} ${data.length === 1 ? 'artículo' : 'artículos'}`;
+
+        if (data.length === 0) {
+
+            const searching = document
+                .getElementById('searchInput')
+                .value.trim().length > 0;
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <div class="empty-icon">${searching ? '🔎' : '📦'}</div>
+                            <h3>${searching ? 'Sin resultados' : 'Todavía no hay artículos'}</h3>
+                            <p>
+                                ${searching
+                                    ? 'No encontramos artículos con ese nombre.'
+                                    : 'Agregá tu primer artículo para comenzar.'}
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        table.innerHTML = data.map(article => `
+
+            <tr>
+
+                <td>
+                    <span class="id-badge">#${escapeHTML(article.id)}</span>
+                </td>
+
+                <td>
+                    <span class="article-name">
+                        ${escapeHTML(article.nombre)}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="price">
+                        ${currencyFormatter.format(Number(article.precio))}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="actions">
+
+                        <button
+                            class="action-btn edit-btn"
+                            title="Editar artículo"
+                            aria-label="Editar artículo"
+                            onclick="editArticle(${Number(article.id)})"
+                        >
+                            ✎
+                        </button>
+
+                        <button
+                            class="action-btn delete-btn"
+                            title="Eliminar artículo"
+                            aria-label="Eliminar artículo"
+                            onclick="deleteArticle(${Number(article.id)})"
+                        >
+                            ✕
+                        </button>
+
+                    </div>
+                </td>
+
+            </tr>
+
+        `).join('');
+
+    }
+
+    // ==========================================
+    // CREAR ARTÍCULO
+    // ==========================================
+
+    function openCreateModal() {
+
+        editingId = null;
+
+        document.getElementById('articleForm').reset();
+        document.getElementById('articleId').value = '';
+
+        document.getElementById('modalTitle').textContent =
+            'Nuevo artículo';
+
+        document.getElementById('saveButton').textContent =
+            'Guardar artículo';
+
+        document.getElementById('articleModal').classList.add('show');
+
+        document.getElementById('articleName').focus();
+    }
+
+    // ==========================================
+    // EDITAR ARTÍCULO
+    // ==========================================
+
+    async function editArticle(id) {
+
+        try {
+
+            const article = await apiRequest(`/${id}`);
+
+            editingId = id;
+
+            document.getElementById('articleId').value = article.id;
+            document.getElementById('articleName').value = article.nombre;
+            document.getElementById('articlePrice').value = article.precio;
+
+            document.getElementById('modalTitle').textContent =
+                'Editar artículo';
+
+            document.getElementById('saveButton').textContent =
+                'Guardar cambios';
+
+            document.getElementById('articleModal').classList.add('show');
+
+            document.getElementById('articleName').focus();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast('No se pudo obtener el artículo.', 'error');
+        }
+    }
+
+    // ==========================================
+    // GUARDAR / ACTUALIZAR
+    // ==========================================
+
+    document.getElementById('articleForm').addEventListener(
+        'submit',
+        async function(event) {
+
+            event.preventDefault();
+
+            const nombre = document
+                .getElementById('articleName')
+                .value
+                .trim();
+
+            const precio = Number(
+                document.getElementById('articlePrice').value
+            );
+
+            if (!nombre) {
+                showToast('Ingresá un nombre válido.', 'error');
+                return;
+            }
+
+            if (!Number.isFinite(precio) || precio < 0) {
+                showToast('Ingresá un precio válido.', 'error');
+                return;
+            }
+
+            const article = {
+                nombre: nombre,
+                precio: precio
+            };
+
+            const saveButton = document.getElementById('saveButton');
+
+            saveButton.disabled = true;
+            saveButton.textContent = 'Guardando...';
+
+            try {
+
+                if (editingId !== null) {
+
+                    await apiRequest(`/${editingId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(article)
+                    });
+
+                    showToast('Artículo actualizado correctamente.', 'success');
+
+                } else {
+
+                    await apiRequest('', {
+                        method: 'POST',
+                        body: JSON.stringify(article)
+                    });
+
+                    showToast('Artículo creado correctamente.', 'success');
+                }
+
+                closeModal();
+
+                await loadArticles();
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast(error.message || 'No se pudo guardar el artículo.', 'error');
+
+            } finally {
+
+                saveButton.disabled = false;
+
+                saveButton.textContent =
+                    editingId !== null
+                        ? 'Guardar cambios'
+                        : 'Guardar artículo';
+
+            }
+
+        }
+    );
+
+    // ==========================================
+    // ELIMINAR ARTÍCULO
+    // ==========================================
+
+    async function deleteArticle(id) {
+
+        const article = articles.find(item => Number(item.id) === id);
+
+        if (!article) {
+            showToast('No se encontró el artículo.', 'error');
+            return;
+        }
+
+        const confirmed = confirm(
+            `¿Estás seguro de que querés eliminar "${article.nombre}"?\n\nEsta acción no se puede deshacer.`
+        );
+
+        if (!confirmed) return;
+
+        try {
+
+            await apiRequest(`/${id}`, {
+                method: 'DELETE'
+            });
+
+            showToast('Artículo eliminado correctamente.', 'success');
+
+            await loadArticles();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(error.message || 'No se pudo eliminar el artículo.', 'error');
+        }
+    }
+
+    // ==========================================
+    // MODAL
+    // ==========================================
+
+    function closeModal() {
+
+        document.getElementById('articleModal')
+            .classList.remove('show');
+
+        document.getElementById('articleForm').reset();
+
+        editingId = null;
+    }
+
+    document.getElementById('articleModal').addEventListener(
+        'click',
+        function(event) {
+
+            if (event.target === this) {
+                closeModal();
+            }
+
+        }
+    );
+
+    document.addEventListener('keydown', function(event) {
+
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+
+    });
+
+    // ==========================================
+    // NOTIFICACIONES
+    // ==========================================
+
+    let toastTimeout;
+
+    function showToast(message, type = 'success') {
+
+        const toast = document.getElementById('toast');
+
+        toast.textContent = message;
+
+        toast.className = `toast ${type} show`;
+
+        clearTimeout(toastTimeout);
+
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3500);
+    }
+
+    // ==========================================
+    // NAVEGACIÓN
+    // ==========================================
+
+    function goToDashboard() {
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+    }
+
+    function goToArticles() {
+
+        document.getElementById('articlesSection').scrollIntoView({
+            behavior: 'smooth'
+        });
+
+        document.getElementById('searchInput').focus();
+
+    }
+
+    // ==========================================
+    // SEGURIDAD: ESCAPAR TEXTO HTML
+    // ==========================================
+
+    function escapeHTML(value) {
+
+        return String(value ?? '').replace(/[&<>"']/g, char => {
+
+            const entities = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            };
+
+            return entities[char];
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
